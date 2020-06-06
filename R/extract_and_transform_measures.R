@@ -48,7 +48,7 @@ shuffle_geo <- function(df) {
 # LOAD RAW DATA -----------------------------------------------------------
 
 stats_summary <- read_csv('data/stats_summary.csv')
-stats_platform <- read_csv('data/stats_platform.csv')
+stats_platform <- read_csv('data/stats_platform.csv') 
 stats_dma <- read_csv('data/stats_dma.csv')
 top_activities <- read_csv('data/top_activities.csv')
 
@@ -109,18 +109,16 @@ stats_summary <- stats_summary %>%
     activation_rate = active_users_new/new_users,
     retention_rate = retained_users/active_users_prior,
     churn_rate = churned_users/active_users_prior,
-    utilization_rate_school = active_tam_schools/universe_schools,
     utilization_rate_users = case_when(
-      account_type == 'Teacher'~ active_users/universe_teachers,
-      account_type == 'Family' ~  active_users/universe_families,
-      TRUE ~ 0),
-    utilization_rate_student = unique_classroom_students/universe_students
+      account_type == 'account_type_a'~ active_users/unisverse_account_type_a,
+      account_type == 'account_type_b' ~  active_users/unisverse_account_type_b,
+      TRUE ~ 0)
   )
 
 
 # Pivot Longer for tidyer data --------------------------------------------
 stats_summary <- stats_summary %>%
-  pivot_longer(cols = new_users:utilization_rate_student, names_to = 'measure') %>%
+  pivot_longer(cols = new_users:utilization_rate_users, names_to = 'measure') %>%
   arrange(account_type, measure, start_date) %>%
   filter(!is.na(value))
 
@@ -186,23 +184,21 @@ stats_dma <- stats_dma %>%
     account_type,
     dma_code,
     dma_name,
-    new_users:universe_families
+    new_users:unisverse_account_type_b
   ) %>%
   mutate(
     winback_users = active_users-retained_users-active_users_new,
     activation_rate = active_users_new/new_users,
     retention_rate = retained_users/active_users_prior,
     churn_rate = churned_users/active_users_prior,
-    utilization_rate_school = active_tam_schools/universe_schools,
     utilization_rate_users = case_when(
-      account_type == 'Teacher'~ active_users/universe_teachers,
-      account_type == 'Family' ~  active_users/universe_families,
-      TRUE ~ 0),
-    utilization_rate_student = unique_classroom_students/universe_students
+      account_type == 'account_type_a'~ active_users/unisverse_account_type_a,
+      account_type == 'account_type_b' ~  active_users/unisverse_account_type_b,
+      TRUE ~ 0)
   )
 
 stats_dma <- stats_dma %>%
-  pivot_longer(cols = new_users:utilization_rate_student, names_to = 'measure') %>%
+  pivot_longer(cols = new_users:utilization_rate_users, names_to = 'measure') %>%
   arrange(account_type, measure, start_date) %>%
   filter(!is.na(value)) %>%
   mutate(
@@ -228,8 +224,8 @@ stats_dma <- stats_dma %>%
 # Create List for Measure Dropdown ----------------------------------------
 measure_list <- stats_summary %>%
   filter(!measure %in% c(
-    'universe_teachers',
-    'universe_families',
+    'unisverse_account_type_a',
+    'unisverse_account_type_b',
     'universe_students',
     'universe_schools',
     'utilization_rate_users',
@@ -241,8 +237,8 @@ measure_list <- stats_summary %>%
 
 names(measure_list) <-  stats_summary %>%
   filter(!measure %in% c(
-    'universe_teachers',
-    'universe_families',
+    'unisverse_account_type_a',
+    'unisverse_account_type_b',
     'universe_students',
     'universe_schools',
     'utilization_rate_users',

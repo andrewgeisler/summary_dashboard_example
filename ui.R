@@ -27,8 +27,8 @@ body <- dashboardBody(
     tabItem(
       tabName = "summary_stats",
       tabsetPanel(
-        tabPanel('Teacher', source('ui/teacher_summary_stats.R', local=TRUE)$value),
-        tabPanel('Family', source('ui/family_summary_stats.R', local=TRUE)$value)
+        tabPanel('Account Type A', source('ui/account_type_a_summary_stats.R', local=TRUE)$value),
+        tabPanel('Account Type B', source('ui/account_type_b_summary_stats.R', local=TRUE)$value)
       )
     ),
 
@@ -58,8 +58,8 @@ body <- dashboardBody(
         geo_meaure_select
       ),
       tabsetPanel(
-        tabPanel('Teacher', source('ui/teacher_geo.R', local=TRUE)$value),
-        tabPanel('Family', source('ui/family_geo.R', local=TRUE)$value)
+        tabPanel('Account Type A', source('ui/account_type_a_geo.R', local=TRUE)$value),
+        tabPanel('Account Type B', source('ui/account_type_b_geo.R', local=TRUE)$value)
       )
     ) 
     
